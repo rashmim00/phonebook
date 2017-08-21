@@ -1,4 +1,4 @@
-<html lang="en">
+<html lang="en" data-ng-app="phoneApp">
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -6,35 +6,62 @@
 
 		<title>Rashmi Phonebook</title>
 
-		<!-- Bootstrap -->
+		<!-- external js and links -->
 		<link href="external/bootstrap-3.3.7-dist/bootstrap.min.css" rel="stylesheet">
-		<link href="index.css" rel="stylesheet">
+		<script src="external/angular-1.6.3.min.js"></script>
 
+		<!--local files -->
+		<link href="index.css" rel="stylesheet">
+		<script src="phoneApp.js"></script>
 	</head>
-	<body>
-		<h3> Welcome to Rashmi's Phonebook </h3>
+	<body data-ng-controller="MainCtrl as mc">
+
 		<div class="row" style="margin: 15px;">
 			<ol class="breadcrumb">
-				<li class="active">Rashmi</li>
+				<li class="active">{{mc.name}}</li>
 				<li>Phonebook</li>
 			</ol>
+			<div class="pull-left">
+				Add for filter by Groups
+			</div>
+			<div class="pull-right">
+				<button type="submit" class="btn btn-primary" action="mc.addContact()">
+					<span class="glyphicon glyphicon-plus-sign"></span> Add Contact
+				</button>
+			</div>
+		</div>
+		<div class="row" style="margin: 15px;">
+			<!-- Panel for each contact -->
+			<div class="panel panel-default" data-ng-repeat="contact in contactsList = (mc.contacts)">
+			    <div class="panel-heading">{{contact.firstName}} {{contact.lastName}} <span data-ng-if="contact.birthdate && mc.isToday(contact.birthdate)" class="label label-danger"> <span class="glyphicon glyphicon-gift" ></span> Birthday Today</span>
+			    	<!-- label for each group associated with -->
+			    	<span class="label label-info" data-ng-repeat="grp in contact.groups"> #{{(mc.groups | filter : {id: grp.id})[0].name }}</span>
 
-			<div class="panel panel-default">
-			    <div class="panel-heading">Alicia Keyes <span class="label label-danger"> <span class="glyphicon glyphicon-gift" ></span> Birthday Today</span>
-			    	<span class="label label-info"> #Grammy</span>
-			    	<div class="pull-right">
-         			   <a href="#" class="btn btn-xs" title="favorite"><span class="glyphicon glyphicon-heart"></span></a>
-         			   <a href="#" class="btn btn-xs" title="edit"><span class="glyphicon glyphicon-edit"></span></a>
-         			   <a href="#" class="btn btn-xs" title="add to group"><span class="glyphicon glyphicon-user"></span></a>
-         			   <a href="#" class="btn btn-xs" title="delete contact"><span class="glyphicon glyphicon-trash"></span></a>
-         			  </div>
+					<!-- action buttons -->
+			    	<div class="btn-group pull-right">
+         			   <button action="mc.makeFavorite(contact)" class="btn btn-xs btn-link" title="favorite"><span data-ng-class="{'glyphicon glyphicon-heart': contact.favorite, 'glyphicon glyphicon-heart-empty': contact.favorite == 0}"></span></button>
+         			   <button action="mc.editContact(contact)" class="btn btn-xs btn-link" title="edit"><span class="glyphicon glyphicon-edit"></span></button>
+         			   <button action="mc.addToGroup(contact)" class="btn btn-xs btn-link" title="add to group"><span class="glyphicon glyphicon-user"></span></button>
+         			   <button action="mc.deleteContact(contact)" class="btn btn-xs btn-link" title="delete contact"><span class="glyphicon glyphicon-trash"></span></button>
+         			</div>
 			    </div>
 			    <div class="panel-body">
-			    	<a href="http://maps.google.com/maps?daddr=12345 West Niles Dr, Los Angeles, CA" target="blank" title="Open in map"> <span class="glyphicon glyphicon-map-marker"></span></a> 12345 West Niles Dr, Los Angeles, CA<br>
-					<a href="tel:213-234-3456" title="call Home"><span class="glyphicon glyphicon-earphone"></span></a> call Home at 213-234-3456 <br>
-					<a href="mailto:alicia.keyes@gmail.com?Subject=Hello%20again" title="email Alicia"><span class="glyphicon glyphicon-envelope"></span></a> Email at alicia.keyes@gmail.com
+			    	<!-- open address in google maps -->
+			    	<a data-ng-if="contact.address" href="http://maps.google.com/maps?daddr={{contact.address}}" target="blank" title="Open in map"> <span class="glyphicon glyphicon-map-marker"></span></a> {{contact.address}}<br>
+
+					<!-- show all phone numbers and click to call -->
+					<div ng-repeat="phone in contact.phones">
+						<a href="tel:{{phone.number}}" title="call {{phone.type}}"><span class="glyphicon glyphicon-earphone"></span></a> call {{phone.type}} at {{phone.number}} <br>
+					</div>
+
+					<!-- open email client-->
+					<a data-ng-if="contact.email" href="mailto:{{contact.email}}?Subject=Hello" title="email {{contact.firstName}}"><span class="glyphicon glyphicon-envelope"></span></a> Email at {{contact.email}}
 			    </div>
 			</div>
+			<!-- panel end -->
+
+			<!-- no contacts in list -->
+			<div data-ng-hide="mc.contacts.length">No contacts found</div>
 		</div>
 	</body>
 </html>
