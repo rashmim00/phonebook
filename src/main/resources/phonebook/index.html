@@ -8,7 +8,11 @@
 
 		<!-- external js and links -->
 		<link href="external/bootstrap-3.3.7-dist/bootstrap.min.css" rel="stylesheet">
+
+		<script src="external/jquery-3.2.0.min.js"></script>
 		<script src="external/angular-1.6.3.min.js"></script>
+		<script src="external/ui-bootstrap-tpls-2.5.0.min.js"></script>
+		<script src="external/bootstrap-3.3.7-dist/bootstrap.min.js"></script>
 
 		<!--local files -->
 		<link href="index.css" rel="stylesheet">
@@ -22,7 +26,14 @@
 				<li>Phonebook</li>
 			</ol>
 			<div class="pull-left">
-				Add for filter by Groups
+				<div class="btn-group">
+					<button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+						<span>{{mc.filterGrp}} </span> <b class="caret"></b>
+					</button>
+					<ul class="Groups dropdown-menu" role="menu">
+						<li data-ng-repeat="grp in mc.groups"><button class="btn btn-link" data-ng-click="mc.filterBy(grp.id)"> {{grp.name}} </button></li>
+					</ul>
+				</div>
 			</div>
 			<div class="pull-right">
 				<button type="submit" class="btn btn-primary" action="mc.addContact()">
@@ -36,18 +47,19 @@
 			    <div class="panel-heading">{{contact.firstName}} {{contact.lastName}} <span data-ng-if="contact.birthdate && mc.isToday(contact.birthdate)" class="label label-danger"> <span class="glyphicon glyphicon-gift" ></span> Birthday Today</span>
 			    	<!-- label for each group associated with -->
 			    	<span class="label label-info" data-ng-repeat="grp in contact.groups"> #{{(mc.groups | filter : {id: grp.id})[0].name }}</span>
+					<span class="label label-primary" data-ng-if="contact.company"> {{contact.company}}</span>
 
-					<!-- action buttons -->
+			<!-- action buttons -->
 			    	<div class="btn-group pull-right">
          			   <button action="mc.makeFavorite(contact)" class="btn btn-xs btn-link" title="favorite"><span data-ng-class="{'glyphicon glyphicon-heart': contact.favorite, 'glyphicon glyphicon-heart-empty': contact.favorite == 0}"></span></button>
          			   <button action="mc.editContact(contact)" class="btn btn-xs btn-link" title="edit"><span class="glyphicon glyphicon-edit"></span></button>
-         			   <button action="mc.addToGroup(contact)" class="btn btn-xs btn-link" title="add to group"><span class="glyphicon glyphicon-user"></span></button>
+         			   <button data-ng-click="mc.addToGroup(contact)" class="btn btn-xs btn-link" title="add to group"><span class="glyphicon glyphicon-user"></span></button>
          			   <button action="mc.deleteContact(contact)" class="btn btn-xs btn-link" title="delete contact"><span class="glyphicon glyphicon-trash"></span></button>
          			</div>
 			    </div>
 			    <div class="panel-body">
 			    	<!-- open address in google maps -->
-			    	<a data-ng-if="contact.address" href="http://maps.google.com/maps?daddr={{contact.address}}" target="blank" title="Open in map"> <span class="glyphicon glyphicon-map-marker"></span></a> {{contact.address}}<br>
+			    	<a data-ng-if="contact.address" href="http://maps.google.com/maps?daddr={{contact.address}}" data-toggle="tooltip" target="blank" title="Open in map"> <span class="glyphicon glyphicon-map-marker"></span></a> {{contact.address}}<br>
 
 					<!-- show all phone numbers and click to call -->
 					<div ng-repeat="phone in contact.phones">
