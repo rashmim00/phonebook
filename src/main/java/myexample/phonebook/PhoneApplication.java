@@ -2,8 +2,11 @@ package myexample.phonebook;
 
 import javax.inject.Singleton;
 
+import org.skife.jdbi.v2.DBI;
+
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
+import io.dropwizard.jdbi.DBIFactory;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
@@ -25,9 +28,12 @@ public class PhoneApplication extends Application<PhoneAppConfiguration> {
 
     @Override
 	public void run(PhoneAppConfiguration configuration, Environment environment) {
-
+    	
+       final DBIFactory factory = new DBIFactory();
+       final DBI jdbi = factory.build(environment, configuration.getDatabase(), "mysql");
+         
 		// register our resources
-		environment.jersey().register(new PhoneResource(new PhoneService()));	
+		environment.jersey().register(new PhoneResource(new PhoneService(jdbi)));	
 	
 	}
 }

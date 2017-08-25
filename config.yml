@@ -1,2 +1,8 @@
 server:
   rootPath: /api
+  
+database:
+ driverClass: com.mysql.jdbc.Driver
+ user: phonebook
+ password: phonebook
+ url: jdbc:mysql://localhost:3306/phonebook
