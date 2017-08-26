@@ -48,9 +48,10 @@ app.controller("MainCtrl",["$http","$q","$uibModal", function($http, $q, $uibMod
 		console.log("loading");
 		
 		var contactsPromise = $http.get("/api/phonebook/contacts");
+		var groupsPromise = $http.get("/api/phonebook/groups");
 	
 		// when they are ALL done
-		$q.all([ contactsPromise]).then(function(results) {
+		$q.all([ contactsPromise, groupsPromise]).then(function(results) {
 			// check success
 			var success = results.every(function(element, index, array) {
 				return element.status == 200
@@ -61,19 +62,43 @@ app.controller("MainCtrl",["$http","$q","$uibModal", function($http, $q, $uibMod
 				ctrl.contacts.forEach(function(citem) {
 					console.log("on load " + citem.firstName + citem.birthdate);
 				});
+				ctrl.groups = results[1].data;
 				}
-			}, function(error) {});
-		group = {id:1,name:"Grammy Lovers", icon:"", participants : [1]};	
+			}, function(error) {});	
 		
-		ctrl.groups.push(group);
+		
 		 $('[data-toggle="tooltip"]').tooltip();
 	}
 
 	ctrl.addContact = function() {console.log("add contact clicked");}
-	ctrl.makeFavorite = function(contact) {console.log("make Favorite clicked");}
+	
+	ctrl.makeFavorite = function(contact) {
+		console.log("make Favorite clicked");
+		contact.favorite = (contact.favorite != 0) ? 0 : 1;
+		$http.put("/api/phonebook/contacts/" + contact.id, contact).then(function(response) {
+		console.log("put response status" + response.status);	
+		//refresh contact
+		ctrl.contacts.forEach(function(c, index) {
+			if (c.id == contact.id) {
+				ctrl.contacts[index] = contact;
+				return;
+			}
+		})	
+			
+		}, function(response){});
+	}
+	
 	ctrl.editContact = function(contact) {console.log("edit Contact clicked");}
 
-	ctrl.deleteContact = function(contact) {console.log("delete contact clicked");}
+	ctrl.deleteContact = function(contact) {
+		console.log("delete contact clicked");
+		$http.delete("/api/phonebook/contacts/" + contact.id).then(function(response) {
+			// check for delete success
+			var deleted = (response.status === 204);
+			ctrl.load();
+			
+		}, function(response){});
+	}
 
 
 	ctrl.load();

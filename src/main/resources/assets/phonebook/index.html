@@ -53,14 +53,15 @@
 
 			<!-- action buttons -->
 			    	<div class="btn-group pull-right">
-         			   <button action="mc.makeFavorite(contact)" class="btn btn-xs btn-link" title="favorite"><span data-ng-class="{'glyphicon glyphicon-heart': contact.favorite, 'glyphicon glyphicon-heart-empty': contact.favorite == 0}"></span></button>
-         			   <button action="mc.editContact(contact)" class="btn btn-xs btn-link" title="edit"><span class="glyphicon glyphicon-edit"></span></button>
+         			   <button data-ng-click="mc.makeFavorite(contact)" class="btn btn-xs btn-link" title="favorite"><span data-ng-class="{'glyphicon glyphicon-heart': contact.favorite, 'glyphicon glyphicon-heart-empty': contact.favorite == 0}"></span></button>
+         			   <button data-ng-click="mc.editContact(contact)" class="btn btn-xs btn-link" title="edit"><span class="glyphicon glyphicon-edit"></span></button>
          			   <button data-ng-click="mc.addToGroup(contact)" class="btn btn-xs btn-link" title="add to group"><span class="glyphicon glyphicon-user"></span></button>
-         			   <button action="mc.deleteContact(contact)" class="btn btn-xs btn-link" title="delete contact"><span class="glyphicon glyphicon-trash"></span></button>
+         			   <button data-ng-click="mc.deleteContact(contact)" class="btn btn-xs btn-link" title="delete contact"><span class="glyphicon glyphicon-trash"></span></button>
          			</div>
 			    </div>
 			    <div class="panel-body">
 			    	<!-- open address in google maps -->
+			    	<img src="http://maps.google.com/maps?daddr={{contact.address}}&zoom=12&size=600x300&maptype=normal" />
 			    	<a data-ng-if="contact.address" href="http://maps.google.com/maps?daddr={{contact.address}}" data-toggle="tooltip" target="blank" title="Open in map"> <span class="glyphicon glyphicon-map-marker"></span></a> {{contact.address}}<br>
 
 					<!-- show all phone numbers and click to call -->

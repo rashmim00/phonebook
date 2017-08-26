@@ -27,11 +27,18 @@ public class PhoneService {
 	public List<Contact> getAllContacts() {
 		List<Contact> all = new ArrayList<Contact>();
 		Handle h = jdbi.open();
-		all = h.createQuery("select * from contact").map(new ContactMapper()).list();
+		all = h.createQuery("select * from contact order by firstName asc").map(new ContactMapper()).list();
 		h.createQuery("select * from phonenumber").map(new PhoneMapper(all)).list();	
 		jdbi.close(h);
 		return all;
 	}
+	
+	// returns a list of all contacts
+		public List<Group> getAllGroups() {
+			List<Group> all = new ArrayList<Group>();
+			all.add(new Group (1,"Grammy Lovers","", new ArrayList<Contact>()));
+			return all;
+		}
 
 	// returns a single user by id
 	public Contact getContact(int id) {
@@ -72,7 +79,7 @@ public class PhoneService {
 				+ "address, birthdate, company, email, favorite, firstName, lastName) values ("
 				+ ":address, :birthdate, :company, :email, :favorite, :firstName, :lastName") //
 				.bind("address", contact.getAddress())
-				.bind("birthdate", contact.getBirthdate())
+				.bind("birthdate", contact.getBirthdate().getTime())
 				.bind("company", contact.getCompany())
 				.bind("email", contact.getEmail())
 				.bind("favorite", contact.getFavorite())
@@ -102,7 +109,7 @@ public class PhoneService {
 				+ "address = :address, birthdate = :birthdate, company = :company, email =:email, favorite = :favorite," //
 				+ "firstName =:firstName, lastName =:lastName where id = :id") //
 				.bind("address", contact.getAddress())
-				.bind("birthdate", contact.getBirthdate())
+				.bind("birthdate", contact.getBirthdate().getTime())
 				.bind("company", contact.getCompany())
 				.bind("email", contact.getEmail())
 				.bind("favorite", contact.getFavorite())
@@ -112,7 +119,7 @@ public class PhoneService {
 	
 		// update phone number		
 		if(!contact.getPhones().isEmpty()){
-			contact.getPhones().forEach(p -> {
+			contact.getPhones().forEach(p -> {			
 				if(p.getId() == -1) {
 					//insert new numbers
 					h.createStatement("insert into phonenumber ( " //
@@ -121,9 +128,9 @@ public class PhoneService {
 							.bind("phoneType", p.getType())
 							.bind("phoneNumber", p.getNumber()).execute();
 				}
-				else {
+				else {					
 				h.createStatement("update phonenumber set " //
-				+ "phone_type =:phoneType, phone_number =:phoneNumber where contact_id =:id) ") //
+				+ "phone_number =:phoneNumber where contact_id =:contact_id and phone_type =:phoneType") //
 				.bind("contact_id", contact.getId())
 				.bind("phoneType", p.getType())
 				.bind("phoneNumber", p.getNumber())

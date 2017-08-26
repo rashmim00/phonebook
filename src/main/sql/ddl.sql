@@ -36,20 +36,12 @@ CREATE TABLE if not exists phonebook.group_participants (
  INSERT INTO `phonebook`.`group_participants` (`groupId`, `contactId`) VALUES ('1', '1');
  
  CREATE TABLE if not exists phonebook.phoneNumber (
-     id MEDIUMINT NOT NULL AUTO_INCREMENT,
+     contact_id MEDIUMINT NOT NULL,
      phone_type  VARCHAR(255),
      phone_number  VARCHAR(255),
-     PRIMARY KEY (id)
+     PRIMARY KEY (contact_id, phone_type)
 );
 
-INSERT INTO `phonebook`.`phonenumber` (`id`, `phone_type`, `phone_number`) VALUES ('1', 'home', '408-444-2134');
-INSERT INTO `phonebook`.`phonenumber` (`id`, `phone_type`, `phone_number`) VALUES ('2', 'Mobile', '408-111-2222');
+INSERT INTO `phonebook`.`phonenumber` (`contact_id`, `phone_type`, `phone_number`) VALUES ('1', 'home', '408-444-2134');
+INSERT INTO `phonebook`.`phonenumber` (`contact_id`, `phone_type`, `phone_number`) VALUES ('2', 'Mobile', '408-111-2222');
 
-CREATE TABLE if not exists phonebook.contact_phone (
-   contactId int NOT NULL default '0',
-   phoneId int NOT NULL default '0',
-   PRIMARY KEY (contactId, phoneId)
- );
- 
-INSERT INTO `phonebook`.`contact_phone` (`contactId`, `phoneId`) VALUES ('1', '1');
-INSERT INTO `phonebook`.`contact_phone` (`contactId`, `phoneId`) VALUES ('1', '2');
