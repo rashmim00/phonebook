@@ -48,7 +48,7 @@
 			<div class="panel panel-default" data-ng-repeat="contact in contactsList = (mc.contacts)">
 			    <div class="panel-heading">{{contact.firstName}} {{contact.lastName}} <span data-ng-if="contact.birthdate && mc.isToday(contact.birthdate)" class="label label-danger"> <span class="glyphicon glyphicon-gift" ></span> Birthday Today</span>
 			    	<!-- label for each group associated with -->
-<!-- 			    	<span class="label label-info" data-ng-repeat="grp in contact.groups"> #{{(mc.groups | filter : {id: grp.id})[0].name }}</span> -->
+			    	<span class="label label-info" data-ng-repeat="grp in contact.groups"> #{{(mc.groups | filter : {id: grp.id})[0].name }}</span>
 					<span class="label label-primary" data-ng-if="contact.company"> {{contact.company}}</span>
 
 			<!-- action buttons -->

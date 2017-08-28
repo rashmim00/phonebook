@@ -19,4 +19,5 @@ public class Contact {
 	private String firstName;
 	private String lastName;
 	List<Phone> phones;
+	List<Integer> groups;
 }

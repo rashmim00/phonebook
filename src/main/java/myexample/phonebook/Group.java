@@ -9,5 +9,5 @@ public class Group {
 	private int id;
 	private String name;
 	private String icon;
-	private List<Contact> participants;
+	private List<Integer> participants;
 }

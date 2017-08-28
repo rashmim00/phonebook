@@ -29,6 +29,7 @@ public class PhoneService {
 		Handle h = jdbi.open();
 		all = h.createQuery("select * from contact order by firstName asc").map(new ContactMapper()).list();
 		h.createQuery("select * from phonenumber").map(new PhoneMapper(all)).list();	
+		h.createQuery("select * from group_participants").map(new ContactGroupMapper(all)).list();	
 		jdbi.close(h);
 		return all;
 	}
@@ -36,8 +37,11 @@ public class PhoneService {
 	// returns a list of all contacts
 		public List<Group> getAllGroups() {
 			List<Group> all = new ArrayList<Group>();
-			all.add(new Group (1,"Grammy Lovers","", new ArrayList<Contact>()));
-			return all;
+			Handle h = jdbi.open();
+			all = h.createQuery("select * from groups order by groupName asc").map(new GroupMapper()).list();
+			h.createQuery("select * from group_participants").map(new GroupParticipantMapper(all)).list();	
+			jdbi.close(h);
+			return all;			
 		}
 
 	// returns a single user by id
@@ -61,6 +65,10 @@ public class PhoneService {
 		Handle h = jdbi.open();
 	// add transaction thing
 		h.createStatement("delete from phonenumber where contact_id = :id") //
+		.bind("id", id) //
+		.execute();
+		
+		h.createStatement("delete from group_participants where contactId = :id") //
 		.bind("id", id) //
 		.execute();
 		
@@ -151,11 +159,79 @@ public class PhoneService {
 		public Contact map(int index, ResultSet r, StatementContext ctx) throws SQLException {
 
 			Contact rv = new Contact(r.getInt("id"), r.getString("address"), new Date(r.getInt("birthdate")), r.getString("company"), 
-					r.getString("email"), r.getInt("favorite"), r.getString("firstName"),r.getString("lastName"), new ArrayList<Phone>());
+					r.getString("email"), r.getInt("favorite"), r.getString("firstName"),r.getString("lastName"), new ArrayList<Phone>(), new ArrayList<Integer>());
 
 			return rv;
 		}
 	}
+	
+	protected class GroupMapper implements ResultSetMapper<Group> {
+		@Override
+		public Group map(int index, ResultSet r, StatementContext ctx) throws SQLException {
+			Group rv = new Group(r.getInt("id"), r.getString("groupName"), r.getString("groupIcon"), new ArrayList<Integer>());
+			return rv;
+		}
+	}
+	
+	protected class GroupParticipantMapper implements ResultSetMapper<Integer> {
+		protected List<Group> groups = null;
+		protected Group group = null;
+		
+		public GroupParticipantMapper(Group group) {
+			this.group = group;
+		}
+		
+		public GroupParticipantMapper(List<Group> groups) {
+			this.groups = groups;
+		}
+		@Override
+		public Integer map(int index, ResultSet r, StatementContext ctx) throws SQLException {
+			Integer rv = r.getInt("contactId");
+
+			if (groups != null) {
+				Integer id = r.getInt("groupId");
+				groups.stream() //
+						.filter(group -> group.getId() == id) //
+						.findFirst() //
+						.ifPresent(group -> group.getParticipants().add(rv));
+			} else if (group != null) {
+				group.getParticipants().add(rv);
+			}
+
+			return rv;
+	
+		}
+	}	
+
+	protected class ContactGroupMapper implements ResultSetMapper<Integer> {
+		protected List<Contact> contacts = null;
+		protected Contact contact = null;
+		
+		public ContactGroupMapper(Contact contact) {
+			this.contact = contact;
+		}
+		
+		public ContactGroupMapper(List<Contact> contacts) {
+			this.contacts = contacts;
+		}
+		@Override
+		public Integer map(int index, ResultSet r, StatementContext ctx) throws SQLException {
+			Integer rv = r.getInt("groupId");
+
+			if (contacts != null) {
+				Integer id = r.getInt("contactId");
+				contacts.stream() //
+						.filter(contact -> contact.getId() == id) //
+						.findFirst() //
+						.ifPresent(contact -> contact.getGroups().add(rv));
+			} else if (contact != null) {
+				contact.getGroups().add(rv);
+			}
+
+			return rv;
+	
+		}
+	}	
 	
 	/**
 	 * Map a result set to a Contact object
