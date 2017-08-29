@@ -37,34 +37,30 @@ app.controller("MainCtrl",["$http","$q","$uibModal", function($http, $q, $uibMod
 		size : "lg"		
 		});
 		modalInstance.result.then(function(addContact) {
-			console.log("on add " + JSON.stringify(addContact));
 			$http.post("/api/phonebook/contacts/", addContact).then(function(response) {				
 				ctrl.load();
 			})
 		}, function() {});
 	}
 	
-	//Add a contact to group. Allows you to select a group and add there
-	ctrl.addToGroup = function(contact) {
-		console.log("add contact to group clicked");
-
-		var modalInstance = $uibModal.open({
-			animation : true,
-			backdrop : "static",
-			templateUrl : "addContactToGroup.html",
-			controller : "AddContactToGroupController",
-			controllerAs : "ctrl",
-			bindToController : true,
-			size : "lg",
-			resolve : {
-				contact : function() {
-					return contact;
-					}
-				}
-			});
-		modalInstance.result.then(function() {}, function() {});
+	//add contact as group participant
+	ctrl.addToGroup = function(contact, groupId) {
+		console.log("add contact to grp clicked");
+		$http.put("/api/phonebook/groups/add/"+groupId +"/"+contact.id).then(function(response) {				
+			ctrl.load();
+		}, function() {});
 	}
-
+	
+	function filterAlreadyAdded(grp){
+		var chk = true;
+		if (ctrl.contact.groups != undefined) {
+			ctrl.contact.groups.forEach(function(o) {
+				if (grp.id == o) chk = false;
+			});				
+		}
+		return chk;
+	}
+	
 	//Show contacts of that group only or all contacts
 	ctrl.filterBy = function(id) {
 		console.log("filter by " + id);
