@@ -32,9 +32,10 @@
 			<div class="pull-left">
 				<div class="btn-group">
 					<button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-						<span>{{mc.filterGrp}} </span> <b class="caret"></b>
+						<span>Filter by: {{mc.filterGrp}} </span> <b class="caret"></b>
 					</button>
 					<ul class="Groups dropdown-menu" role="menu">
+						<li><button class="btn btn-link" data-ng-click="mc.filterBy(0)"> All Contacts </button></li>
 						<li data-ng-repeat="grp in mc.groups"><button class="btn btn-link" data-ng-click="mc.filterBy(grp.id)"> {{grp.name}} </button></li>
 					</ul>
 				</div>

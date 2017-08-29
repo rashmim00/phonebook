@@ -72,10 +72,36 @@ app.controller("MainCtrl",["$http","$q","$uibModal", function($http, $q, $uibMod
 	//Show contacts of that group only or all contacts
 	ctrl.filterBy = function(id) {
 		console.log("filter by " + id);
-			//change filterGrp
-			//change contacts list to the participants of this group id
+		if (id == 0) {
+			$http.get("/api/phonebook/contacts").then(function(response) {				
+			ctrl.contacts = response.data;
+			ctrl.filterGrp = "All Contacts";
+			}, function() {});
+		   return;
 		}
+		else {
+		$http.get("/api/phonebook/groups/"+id).then(function(response) {				
+			group = response.data;
+			ctrl.filterGrp = group.name;
+			ctrl.contacts = getGroupContacts(group.participants);
+		}, function() {});
+	  }
+	}
 
+	function getGroupContacts(participants){
+		$http.get("/api/phonebook/contacts").then(function(response) {				
+			all = response.data;
+			ctrl.contacts = [];
+			participants.forEach(function(p){
+				all.forEach(function(a) {
+					if (a.id == p) ctrl.contacts.push(a);
+				})
+			});
+			
+			}, function() {});		
+		
+	}
+	
 	//Initialize and load all contacts and groups
 	ctrl.load = function(){
 		console.log("loading");
