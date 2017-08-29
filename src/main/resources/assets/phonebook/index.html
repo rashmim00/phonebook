@@ -56,7 +56,7 @@
 			    	<button data-ng-click="mc.makeFavorite(contact)" class="btn btn-xs btn-link" title="favorite"><span data-ng-class="{'glyphicon glyphicon-heart': contact.favorite, 'glyphicon glyphicon-heart-empty': contact.favorite == 0}"></span></button>
 			    	<a ng-click="showDetails = !showDetails"> {{contact.firstName}} {{contact.lastName}}</a> <span data-ng-if="contact.birthdate && mc.isToday(contact.birthdate)" class="label label-danger"> <span class="glyphicon glyphicon-gift" ></span> Birthday Today</span>
 			    	<!-- label for each group associated with -->
-			    	<span class="label label-info" data-ng-repeat="g in contact.groups"> 
+			    	<span class="label label-info" style="margin:2px" data-ng-repeat="g in contact.groups"> 
 			    		<span data-ng-repeat="m in mc.groups | filter:{id:g}"> #{{m.name}}</span>
 			    	</span> <span class="label label-primary" data-ng-if="contact.company"> works at {{contact.company}}</span>
 				
