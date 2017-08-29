@@ -61,6 +61,14 @@ app.controller("MainCtrl",["$http","$q","$uibModal", function($http, $q, $uibMod
 		return chk;
 	}
 	
+	ctrl.removeFromGroup = function(contact, groupId) {
+		console.log("remove contact to grp clicked");
+		$http.put("/api/phonebook/groups/remove/"+groupId +"/"+contact.id).then(function(response) {				
+			ctrl.load();
+		}, function() {});
+	}
+	
+	
 	//Show contacts of that group only or all contacts
 	ctrl.filterBy = function(id) {
 		console.log("filter by " + id);

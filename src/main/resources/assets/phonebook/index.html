@@ -60,7 +60,7 @@
 			    	<div class="btn-group pull-right">		
 			    	  <div class="btn-group" data-ng-show="contact.email">
 						 <button class="btn btn-xs btn-link dropdown-toggle" data-toggle="dropdown" title="email {{contact.firstName}}"><span class="glyphicon glyphicon-envelope"></span></button>
-	         			   <ul class="dropdown-menu dropdown-left" role="menu">
+	         			   <ul class="dropdown-menu dropdown-menu-right" role="menu">
 								<li>
 									<a href="mailto:{{contact.email}}?Subject=Hello" title="email {{contact.firstName}}"><span> Email at {{contact.email}}</span></a> 
 								</li>
@@ -69,7 +69,7 @@
 					  
 			    	  <div class="btn-group">
 						 <button class="btn btn-xs btn-link dropdown-toggle" data-toggle="dropdown" title="call"><span class="glyphicon glyphicon-earphone"></span></button>
-	         			   <ul class="dropdown-menu dropdown-left" role="menu">
+	         			   <ul class="dropdown-menu dropdown-menu-right" role="menu">
 								<li data-ng-repeat="phone in contact.phones">
 									<a href="tel:{{phone.number}}" title="call {{phone.type}}"> call {{phone.type}} at {{phone.number}}</a> 
 								</li>
@@ -78,9 +78,13 @@
     					  
          			   <div class="btn-group">
 						 <button class="btn btn-xs btn-link dropdown-toggle" data-toggle="dropdown" title="add to group"><span class="glyphicon glyphicon-user"></span></button>
-	         			   <ul class="dropdown-menu dropdown-left" role="menu">
+	         			   <ul class="dropdown-menu dropdown-menu-right" role="menu">
 								<li data-ng-repeat="grp in grpList = (mc.groups | filter:mc.filterAlreadyAdded)">
-									<button class="btn btn-link" data-ng-click="mc.addToGroup(contact, grp.id)">{{grp.name}}</button>
+									<button class="btn btn-link" data-ng-click="mc.addToGroup(contact, grp.id)">Add to {{grp.name}}</button>
+								</li>
+								<li class="divider"></li>
+								<li data-ng-repeat="grp in mc.groups">
+									<button class="btn btn-link" data-ng-click="mc.removeFromGroup(contact, grp.id)">Remove from {{grp.name}}</button>
 								</li>
 							</ul>
 					  </div>
