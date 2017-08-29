@@ -21,27 +21,27 @@
 		</div>	
 		
 		<div class="form-group">
-			<label for="company" class="col-sm-3 control-label">Company</label>
+			<label for="company" class="col-sm-3 control-label">Company:</label>
 			<div class="col-sm-9">
 				<input type="text" class="form-control" id="company" name="company" data-ng-maxlength="255"
 					data-ng-model="ctrl.contact.company"></input>
 			</div>
 		</div>	
 		
-		<div class="form-group">
-			<label for="phone1" class="col-sm-3 control-label">Phone</label>
+		<div class="form-group" data-ng-repeat="p in ctrl.contact.phones">
+			<label for="phone{{$index}}" class="col-sm-3 control-label">Phone {{$index + 1}}:</label>
 			<div class="col-sm-2">
-				<select class="form-control" data-ng-model="ctrl.contact.phones[0].type" data-ng-options="t.id as t.name for t in ctrl.phoneTypes"></select>
+				<select class="form-control" data-ng-model="p.type" data-ng-options="t.id as t.name for t in ctrl.phoneTypes"></select>
 			</div>
 			<div class="col-sm-6">
-				<input type="text" class="form-control" id="phone1" name="phone1" data-ng-maxlength="255"
-					data-ng-model="ctrl.contact.phones[0].number" placeholder="(xxx) xxx xxxx"></input>
+				<input type="text" class="form-control" id="phone{{$index}}" name="phone{{$index}}" data-ng-maxlength="255"
+					data-ng-model="p.number" placeholder="(xxx) xxx xxxx"></input>
 			</div>
-			<div class="col-sm-1"><button ng-click="ctrl.addPhone()" class="btn btn-primary"><span class="glyphicon glyphicon-plus-sign"></span></button></div>
+			<div class="col-sm-1"><button ng-click="ctrl.addPhone()" ng-disabled="ctrl.contact.phones.length == ctrl.phoneTypes.length" class="btn btn-primary"><span class="glyphicon glyphicon-plus-sign"></span></button></div>
 		</div>	
 		
 		<div class="form-group">
-			<label for="email" class="col-sm-3 control-label">Email Address</label>
+			<label for="email" class="col-sm-3 control-label">Email Address:</label>
 			<div class="col-sm-9">
 				<input type="text" class="form-control" id="email" name="email" data-ng-maxlength="255"
 					data-ng-model="ctrl.contact.email"></input>
@@ -49,14 +49,14 @@
 		</div>	
 		
 		<div class="form-group">
-			<label for="contactGrp" class="col-sm-3 control-label">Add to Group</label>
+			<label for="contactGrp" class="col-sm-3 control-label">Add to Group:</label>
 			<div class="col-sm-9">
-				<select class="form-control" id="contactGrp" data-ng-model="ctrl.contact.groups[0]" data-ng-options="grp.id as grp.name for grp in ctrl.addGroups"></select>
+				<select multiple class="form-control" id="contactGrp" data-ng-model="ctrl.contact.groups" data-ng-options="grp.id as grp.name for grp in ctrl.addGroups"></select>
 			</div>
 		</div>	
 		
 		<div class="form-group">
-			<label for="address" class="col-sm-3 control-label">Address</label>
+			<label for="address" class="col-sm-3 control-label">Address:</label>
 			<div class="col-sm-9">
 				<input type="text" class="form-control" id="address" name="address" data-ng-maxlength="255"
 					data-ng-model="ctrl.contact.address"></input>
