@@ -43,6 +43,25 @@ app.controller("MainCtrl",["$http","$q","$uibModal", function($http, $q, $uibMod
 		}, function() {});
 	}
 	
+	// add a new Group
+	ctrl.addGroup = function(){
+		console.log("add group clicked");
+		var modalInstance = $uibModal.open({
+			animation : true,
+			backdrop : "static",
+			templateUrl : "addGroup.html",
+			controller : "AddGroupController",
+			controllerAs : "ctrl",
+			bindToController : true,
+			size : "lg"		
+			});
+			modalInstance.result.then(function(addGroup) {
+				$http.post("/api/phonebook/groups/", addGroup).then(function(response) {				
+					ctrl.load();
+				})
+			}, function() {});
+	}
+	
 	//add contact as group participant
 	ctrl.addToGroup = function(contact, groupId) {
 		console.log("add contact to grp clicked");

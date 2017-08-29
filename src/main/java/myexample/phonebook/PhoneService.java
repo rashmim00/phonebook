@@ -215,6 +215,14 @@ public class PhoneService {
 				.executeAndReturnGeneratedKeys(IntegerColumnMapper.PRIMITIVE) //
 				.first();			
 		
+		// add as group participant
+		if(group.getParticipants()!= null && group.getParticipants().size() > 0) {
+			group.getParticipants().forEach(gp -> {
+				h.createStatement("insert into group_participants (groupId, contactId) values (:groupId, :contactId)") //
+				 .bind("groupId", id) 
+				 .bind("contactId", gp).execute();
+			});
+		}
 		group.setId(id);
 		jdbi.close(h);
 		return group;
