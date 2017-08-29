@@ -24,18 +24,12 @@ public class PhoneResource {
 		this.phoneService = phoneService;
 	}
 	
-	@GET
-	@Path("/contacts")
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<Contact> contactsGet() {
-		return phoneService.getAllContacts();
-	}
-	
-	@GET
-	@Path("/groups")
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<Group> groupsGet() {
-		return phoneService.getAllGroups();
+	@DELETE
+	@Path("/contacts/{id: \\d+}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response contactDelete(@PathParam("id") Integer id) {
+		phoneService.deleteContact(id);
+		return Response.noContent().build();
 	}
 	
 	@GET
@@ -45,12 +39,13 @@ public class PhoneResource {
 		return phoneService.getContact(id);
 	}
 	
-	@DELETE
-	@Path("/contacts/{id: \\d+}")
+	@POST
+	@Path("/contacts")
+	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response contactDelete(@PathParam("id") Integer id) {
-		phoneService.deleteContact(id);
-		return Response.noContent().build();
+	public Response contactPost(Contact contact) {
+		contact = phoneService.createContact(contact);
+		return Response.ok(contact).build();
 	}
 	
 	@PUT
@@ -62,12 +57,51 @@ public class PhoneResource {
 		return Response.ok(contact).build();
 	}
 	
+	@GET
+	@Path("/contacts")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Contact> contactsGet() {
+		return phoneService.getAllContacts();
+	}
+	
+	@DELETE
+	@Path("/groups/{id: \\d+}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response groupDelete(@PathParam("id") Integer id) {
+		phoneService.deleteGroup(id);
+		return Response.noContent().build();
+	}
+	
+	
+	@GET
+	@Path("/groups/{id: \\d+}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Group groupGet(@PathParam("id") Integer id) {
+		return phoneService.getGroup(id);
+	}
+	
 	@POST
-	@Path("/contacts/")
+	@Path("/groups")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response contactPost(Contact contact) {
-		contact = phoneService.createContact(contact);
-		return Response.ok(contact).build();
+	public Response groupPost(Group group) {
+		group = phoneService.createGroup(group);
+		return Response.ok(group).build();
+	}
+	
+	@PUT
+	@Path("/groups/{action}/{groupid: \\d+}/{contactid: \\d+}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response groupsPut(@PathParam("action") String action, @PathParam("groupid") Integer groupId, @PathParam("contactid") Integer contactId) {
+		Group g = phoneService.addContactToGroup(action, groupId, contactId);
+		return Response.ok(g).build();
+	}
+	
+	@GET
+	@Path("/groups")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Group> groupsGet() {
+		return phoneService.getAllGroups();
 	}
 }

@@ -19,6 +19,8 @@
 		<!--local files -->
 		<link href="index.css" rel="stylesheet">
 		<script src="phoneApp.js"></script>
+		<script src="addContactController.js"></script>
+		<script src="addContactToGroup.js"></script>
 	</head>
 	<body data-ng-controller="MainCtrl as mc">
 
@@ -38,7 +40,7 @@
 				</div>
 			</div>
 			<div class="pull-right">
-				<button type="submit" class="btn btn-primary" action="mc.addContact()">
+				<button type="submit" class="btn btn-primary" data-ng-click="mc.addContact()">
 					<span class="glyphicon glyphicon-plus-sign"></span> Add Contact
 				</button>
 			</div>
@@ -46,23 +48,23 @@
 		<div class="row" style="margin: 15px;">
 			<!-- Panel for each contact -->
 			<div class="panel panel-default" data-ng-repeat="contact in contactsList = (mc.contacts)">
-			    <div class="panel-heading">{{contact.firstName}} {{contact.lastName}} <span data-ng-if="contact.birthdate && mc.isToday(contact.birthdate)" class="label label-danger"> <span class="glyphicon glyphicon-gift" ></span> Birthday Today</span>
+			    <div class="panel-heading"><a ng-click="showDetails = !showDetails"> {{contact.firstName}} {{contact.lastName}}</a> <span data-ng-if="contact.birthdate && mc.isToday(contact.birthdate)" class="label label-danger"> <span class="glyphicon glyphicon-gift" ></span> Birthday Today</span>
 			    	<!-- label for each group associated with -->
 			    	<span class="label label-info" data-ng-repeat="grp in contact.groups"> #{{(mc.groups | filter : {id: grp.id})[0].name }}</span>
 					<span class="label label-primary" data-ng-if="contact.company"> {{contact.company}}</span>
-
-			<!-- action buttons -->
-			    	<div class="btn-group pull-right">
+					
+				<!-- action buttons -->
+			    	<div class="btn-group pull-right">			    	   
          			   <button data-ng-click="mc.makeFavorite(contact)" class="btn btn-xs btn-link" title="favorite"><span data-ng-class="{'glyphicon glyphicon-heart': contact.favorite, 'glyphicon glyphicon-heart-empty': contact.favorite == 0}"></span></button>
          			   <button data-ng-click="mc.editContact(contact)" class="btn btn-xs btn-link" title="edit"><span class="glyphicon glyphicon-edit"></span></button>
          			   <button data-ng-click="mc.addToGroup(contact)" class="btn btn-xs btn-link" title="add to group"><span class="glyphicon glyphicon-user"></span></button>
          			   <button data-ng-click="mc.deleteContact(contact)" class="btn btn-xs btn-link" title="delete contact"><span class="glyphicon glyphicon-trash"></span></button>
          			</div>
 			    </div>
-			    <div class="panel-body">
+			    <div class="panel-body" data-ng-show="showDetails">
 			    	<!-- open address in google maps -->
-			    	<img src="http://maps.google.com/maps?daddr={{contact.address}}&zoom=12&size=600x300&maptype=normal" />
-			    	<a data-ng-if="contact.address" href="http://maps.google.com/maps?daddr={{contact.address}}" data-toggle="tooltip" target="blank" title="Open in map"> <span class="glyphicon glyphicon-map-marker"></span></a> {{contact.address}}<br>
+<!-- 			    	<img src="http://maps.google.com/maps?daddr={{contact.address}}&zoom=12&size=600x300&maptype=normal" /> -->
+			    	<a data-ng-if="contact.address" href="http://maps.google.com/maps?daddr={{contact.address}}" data-toggle="tooltip" target="blank" title="Open in map"> <span class="glyphicon glyphicon-map-marker"></span></a>{{contact.address}}<br>
 
 					<!-- show all phone numbers and click to call -->
 					<div ng-repeat="phone in contact.phones">
@@ -70,7 +72,7 @@
 					</div>
 
 					<!-- open email client-->
-					<a data-ng-if="contact.email" href="mailto:{{contact.email}}?Subject=Hello" title="email {{contact.firstName}}"><span class="glyphicon glyphicon-envelope"></span></a> Email at {{contact.email}}
+					<a data-ng-if="contact.email" href="mailto:{{contact.email}}?Subject=Hello" title="email {{contact.firstName}}"><span class="glyphicon glyphicon-envelope"></span></a><span data-ng-if="contact.email"> Email at {{contact.email}}</span>
 			    </div>
 			</div>
 			<!-- panel end -->

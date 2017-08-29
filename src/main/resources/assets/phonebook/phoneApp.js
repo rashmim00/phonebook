@@ -9,6 +9,7 @@ var app = angular.module("phoneApp",['ui.bootstrap','ngRoute']);
 //        redirectTo: '/contacts'
 //    })
 //});
+
 app.controller("MainCtrl",["$http","$q","$uibModal", function($http, $q, $uibModal){
 	var ctrl = this;
 
@@ -22,28 +23,74 @@ app.controller("MainCtrl",["$http","$q","$uibModal", function($http, $q, $uibMod
 		var today = new Date();
 		return (today.toDateString() == (new Date(otherDate)).toDateString());
 	}
-
+	
+	//open add contact modal dialog
+	ctrl.addContact = function() {
+		console.log("add contact clicked");
+		var modalInstance = $uibModal.open({
+		animation : true,
+		backdrop : "static",
+		templateUrl : "addContact.html",
+		controller : "AddContactController",
+		controllerAs : "ctrl",
+		bindToController : true,
+		size : "lg",
+		resolve : {
+			contact : function() {
+				return {id : -1,
+					address : "",
+					birthdate : "",
+					company : "",
+					email : "",
+					favorite : 0,
+					firstName : "",
+					lastName : "",
+					phones : [{"id":-1,"type":"home","number":"123-123-1234"}],
+					groups : []};
+			}
+		}
+		});
+		modalInstance.result.then(function(addContact) {
+			console.log("on add " + JSON.stringify(addContact));
+			addContact.groups=[];
+//			addContact.phones.forEach(function(phone){
+//				phone.id = -1;
+//			});
+			$http.post("/api/phonebook/contacts/", addContact).then(function(response) {				
+				ctrl.load();
+			})
+		}, function() {});
+	}
+	
+	//Add a contact to group. Allows you to select a group and add there
 	ctrl.addToGroup = function(contact) {
 		console.log("add contact to group clicked");
 
-//		var modalInstance = $uibModal.open({
-//			animation : true,
-//			backdrop : "static",
-//			templateUrl : "addContactToGroup.html",
-//			controller : "GroupController",
-//			controllerAs : "ctrl",
-//			bindToController : true,
-//			resolve : {	}
-//		});
-//		modalInstance.result.then(function() {}, function() {});
+		var modalInstance = $uibModal.open({
+			animation : true,
+			backdrop : "static",
+			templateUrl : "addContactToGroup.html",
+			controller : "AddContactToGroupController",
+			controllerAs : "ctrl",
+			bindToController : true,
+			size : "lg",
+			resolve : {
+				contact : function() {
+					return contact;
+					}
+				}
+			});
+		modalInstance.result.then(function() {}, function() {});
 	}
 
+	//Show contacts of that group only or all contacts
 	ctrl.filterBy = function(id) {
 		console.log("filter by " + id);
 			//change filterGrp
 			//change contacts list to the participants of this group id
 		}
 
+	//Initialize and load all contacts and groups
 	ctrl.load = function(){
 		console.log("loading");
 		
@@ -60,7 +107,7 @@ app.controller("MainCtrl",["$http","$q","$uibModal", function($http, $q, $uibMod
 			if (success) {
 				ctrl.contacts = results[0].data;
 				ctrl.contacts.forEach(function(citem) {
-					console.log("on load " + citem.firstName + citem.birthdate);
+					console.log("on load " + JSON.stringify(citem));
 				});
 				ctrl.groups = results[1].data;
 				}
@@ -69,9 +116,8 @@ app.controller("MainCtrl",["$http","$q","$uibModal", function($http, $q, $uibMod
 		
 		 $('[data-toggle="tooltip"]').tooltip();
 	}
-
-	ctrl.addContact = function() {console.log("add contact clicked");}
 	
+	//Quickly make a contact your favorite
 	ctrl.makeFavorite = function(contact) {
 		console.log("make Favorite clicked");
 		contact.favorite = (contact.favorite != 0) ? 0 : 1;
@@ -88,8 +134,23 @@ app.controller("MainCtrl",["$http","$q","$uibModal", function($http, $q, $uibMod
 		}, function(response){});
 	}
 	
-	ctrl.editContact = function(contact) {console.log("edit Contact clicked");}
+	//edit a contact	
+	ctrl.editContact = function(contact) {
+		console.log("edit Contact clicked");
+		$http.put("/api/phonebook/contacts/" + contact.id, contact).then(function(response) {
+			console.log("put response status" + response.status);	
+			//refresh contact
+			ctrl.contacts.forEach(function(c, index) {
+				if (c.id == contact.id) {
+					ctrl.contacts[index] = contact;
+					return;
+				}
+			})	
+				
+			}, function(response){});
+	}
 
+	//delete contact
 	ctrl.deleteContact = function(contact) {
 		console.log("delete contact clicked");
 		$http.delete("/api/phonebook/contacts/" + contact.id).then(function(response) {

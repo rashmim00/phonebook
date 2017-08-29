@@ -1,0 +1,868 @@
+{
+	"id": "47d1d6b1-fffe-9dab-6bc2-770e67f35dde",
+	"name": "Phonebook contacts and groups",
+	"allTests": [],
+	"timestamp": 1503964406919,
+	"collection_id": "5bec30b3-abe2-059c-8581-f0721a9ce90f",
+	"folder_id": 0,
+	"target_type": "collection",
+	"environment_id": "0",
+	"data": [],
+	"delay": 0,
+	"count": 1,
+	"collection": {
+		"id": "5bec30b3-abe2-059c-8581-f0721a9ce90f",
+		"name": "Phonebook contacts and groups",
+		"description": "test view all contacts, all groups\ntest add a contact\ntest add a group\nadd contact to group\nremove contact from group\ndelete a contact\ndelete a group\n",
+		"order": [
+			"5c71270c-15df-73d8-52ea-0faf1425ecd1",
+			"99b4a2ac-2b12-67f6-d739-ae0180917bc4",
+			"d4f23b24-2d16-afe9-6cd0-e6be38f21737",
+			"e9c247ae-2e6b-4d9c-df1d-4ba3d92362d2",
+			"3c135002-c7ef-30d4-ec23-4d896d963480",
+			"b8d6fa4f-f092-39e7-46ea-5a4e081ca2f8",
+			"e5f59c93-c21b-aa4d-f7d7-265071644a8f",
+			"729e6729-6362-ceb0-c915-1736b6c36bf9",
+			"97228a4e-cfa2-971a-a05c-1dda4c1bcc70"
+		],
+		"folders": [],
+		"folders_order": [],
+		"requests": [
+			{
+				"id": "3c135002-c7ef-30d4-ec23-4d896d963480",
+				"headers": "Content-Type: application/json\n",
+				"headerData": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": "",
+						"enabled": true
+					}
+				],
+				"url": "http://localhost:8080/api/phonebook/groups",
+				"queryParams": [],
+				"pathVariables": {},
+				"pathVariableData": [],
+				"preRequestScript": null,
+				"method": "GET",
+				"collectionId": "5bec30b3-abe2-059c-8581-f0721a9ce90f",
+				"data": null,
+				"dataMode": "params",
+				"name": "get all groups",
+				"description": "",
+				"descriptionFormat": "html",
+				"time": 1503955241429,
+				"version": 2,
+				"responses": [],
+				"tests": "tests[\"all groups are present\"] = responseCode.code === 200;",
+				"currentHelper": "normal",
+				"helperAttributes": {}
+			},
+			{
+				"id": "5c71270c-15df-73d8-52ea-0faf1425ecd1",
+				"headers": "Content-Type: application/json\n",
+				"headerData": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": "",
+						"enabled": true
+					}
+				],
+				"url": "http://localhost:8080/api/phonebook/contacts",
+				"queryParams": [],
+				"preRequestScript": null,
+				"pathVariables": {},
+				"pathVariableData": [],
+				"method": "POST",
+				"data": "{\"id\":-1,\"address\":\"636 Chelsea Crossing, San Jose, CA\",\"birthdate\":0,\"company\":\"Earth\",\"email\":\"rrrr@gmail.com\",\"favorite\":0,\"firstName\":\"Rashmi1\",\"lastName\":\"Goyal1\",\"phones\":[{\"id\":-1,\"type\":\"home\",\"number\":\"123-123-1234\"}],\"groups\":[]}",
+				"dataMode": "raw",
+				"tests": "var jsonData = JSON.parse(responseBody);\ntests[\"new generated id\"] = jsonData.id > -1;\n\npostman.setGlobalVariable(\"contact_key\", jsonData.id);\n\n",
+				"currentHelper": "normal",
+				"helperAttributes": {},
+				"time": 1503954206171,
+				"name": "add contact",
+				"description": "",
+				"collectionId": "5bec30b3-abe2-059c-8581-f0721a9ce90f",
+				"responses": []
+			},
+			{
+				"id": "729e6729-6362-ceb0-c915-1736b6c36bf9",
+				"headers": "",
+				"headerData": [
+					{
+						"key": "",
+						"value": "",
+						"description": "",
+						"enabled": true
+					}
+				],
+				"url": "http://localhost:8080/api/phonebook/contacts/{{contact_key}}",
+				"queryParams": [],
+				"preRequestScript": null,
+				"pathVariables": {},
+				"pathVariableData": [],
+				"method": "DELETE",
+				"data": null,
+				"dataMode": "params",
+				"tests": "tests[\"delete Status code is 204\"] = responseCode.code === 204;",
+				"currentHelper": "normal",
+				"helperAttributes": {},
+				"time": 1503962743785,
+				"name": "delete contact",
+				"description": "",
+				"collectionId": "5bec30b3-abe2-059c-8581-f0721a9ce90f",
+				"responses": []
+			},
+			{
+				"id": "97228a4e-cfa2-971a-a05c-1dda4c1bcc70",
+				"headers": "Content-Type: application/json\n",
+				"headerData": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": "",
+						"enabled": true
+					}
+				],
+				"url": "http://localhost:8080/api/phonebook/groups/{{group_key}}",
+				"queryParams": [],
+				"preRequestScript": null,
+				"pathVariables": {},
+				"pathVariableData": [],
+				"method": "DELETE",
+				"data": null,
+				"dataMode": "params",
+				"tests": "tests[\"delete success\"] = responseCode.code === 204;",
+				"currentHelper": "normal",
+				"helperAttributes": {},
+				"time": 1503962740866,
+				"name": "delete a group",
+				"description": "",
+				"collectionId": "5bec30b3-abe2-059c-8581-f0721a9ce90f",
+				"responses": []
+			},
+			{
+				"id": "99b4a2ac-2b12-67f6-d739-ae0180917bc4",
+				"headers": "Content-Type: application/json\n",
+				"headerData": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": "",
+						"enabled": true
+					}
+				],
+				"url": "http://localhost:8080/api/phonebook/groups",
+				"queryParams": [],
+				"preRequestScript": null,
+				"pathVariables": {},
+				"pathVariableData": [],
+				"method": "POST",
+				"data": "{\n\t\"id\" : -1,\n\t\"name\" : \"PostMan Group\",\n\t\"icon\" : \"\"\n}",
+				"dataMode": "raw",
+				"tests": "var jsonData = JSON.parse(responseBody);\ntests[\"group created\"] = jsonData.id > -1;\n\ntests[\"Status code is 200\"] = responseCode.code === 200;\n\npostman.setGlobalVariable(\"group_key\", jsonData.id);",
+				"currentHelper": "normal",
+				"helperAttributes": {},
+				"time": 1503955836384,
+				"name": "Add a group",
+				"description": "",
+				"collectionId": "5bec30b3-abe2-059c-8581-f0721a9ce90f",
+				"responses": []
+			},
+			{
+				"id": "b8d6fa4f-f092-39e7-46ea-5a4e081ca2f8",
+				"headers": "Content-Type: application/json\n",
+				"headerData": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": "",
+						"enabled": true
+					}
+				],
+				"url": "http://localhost:8080/api/phonebook/groups",
+				"queryParams": [],
+				"pathVariables": {},
+				"pathVariableData": [],
+				"preRequestScript": null,
+				"method": "GET",
+				"collectionId": "5bec30b3-abe2-059c-8581-f0721a9ce90f",
+				"data": null,
+				"dataMode": "params",
+				"name": "view all contacts of a group",
+				"description": "",
+				"descriptionFormat": "html",
+				"time": 1503955241429,
+				"version": 2,
+				"responses": [],
+				"tests": "tests[\"all groups are present\"] = responseCode.code === 200;",
+				"currentHelper": "normal",
+				"helperAttributes": {},
+				"isFromCollection": true
+			},
+			{
+				"id": "d4f23b24-2d16-afe9-6cd0-e6be38f21737",
+				"headers": "",
+				"headerData": [],
+				"url": "http://localhost:8080/api/phonebook/groups/add/{{group_key}}/{{contact_key}}",
+				"queryParams": [],
+				"pathVariables": {},
+				"pathVariableData": [],
+				"preRequestScript": null,
+				"method": "PUT",
+				"collectionId": "5bec30b3-abe2-059c-8581-f0721a9ce90f",
+				"data": null,
+				"dataMode": "params",
+				"name": "add contact to group",
+				"description": "",
+				"descriptionFormat": "html",
+				"time": 1503961773715,
+				"version": 2,
+				"responses": [],
+				"tests": "tests[\"Status code is 200\"] = responseCode.code === 200 || responseCode.code === 204;",
+				"currentHelper": "normal",
+				"helperAttributes": {}
+			},
+			{
+				"id": "e5f59c93-c21b-aa4d-f7d7-265071644a8f",
+				"headers": "Content-Type: application/json\n",
+				"headerData": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": "",
+						"enabled": true
+					}
+				],
+				"url": "http://localhost:8080/api/phonebook/groups/remove/{{group_key}}/{{contact_key}}",
+				"queryParams": [],
+				"pathVariables": {},
+				"pathVariableData": [],
+				"preRequestScript": null,
+				"method": "PUT",
+				"collectionId": "5bec30b3-abe2-059c-8581-f0721a9ce90f",
+				"data": null,
+				"dataMode": "params",
+				"name": "remove contact from group",
+				"description": "",
+				"descriptionFormat": "html",
+				"time": 1503962127384,
+				"version": 2,
+				"responses": [],
+				"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;",
+				"currentHelper": "normal",
+				"helperAttributes": {}
+			},
+			{
+				"id": "e9c247ae-2e6b-4d9c-df1d-4ba3d92362d2",
+				"headers": "",
+				"headerData": [],
+				"url": "http://localhost:8080/api/phonebook/contacts",
+				"queryParams": [],
+				"preRequestScript": null,
+				"pathVariables": {},
+				"pathVariableData": [],
+				"method": "GET",
+				"data": null,
+				"dataMode": "params",
+				"version": 2,
+				"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\n",
+				"currentHelper": "normal",
+				"helperAttributes": {},
+				"time": 1503954991318,
+				"name": "get all contacts",
+				"description": "",
+				"collectionId": "5bec30b3-abe2-059c-8581-f0721a9ce90f",
+				"responses": []
+			}
+		],
+		"timestamp": 1503947460907,
+		"synced": false,
+		"syncedFilename": "",
+		"remote_id": 928473,
+		"remoteLink": "https://www.getpostman.com/collections/ce6c471f6c40e0336264",
+		"remoteLinkUpdatedAt": 1503963455416,
+		"public": false,
+		"owner": "2647937",
+		"subscribed": false,
+		"createdAt": "2017-08-28T19:11:01.000Z",
+		"updatedAt": "2017-08-28T23:38:53.119Z",
+		"write": true,
+		"published": false,
+		"favorite": false,
+		"permissions": {},
+		"syncedPermissions": {},
+		"sharedWithTeam": false
+	},
+	"folder": null,
+	"environment": null,
+	"globals": [
+		{
+			"key": "contact_key",
+			"type": "text",
+			"value": "7",
+			"enabled": true
+		},
+		{
+			"key": "group_key",
+			"type": "text",
+			"value": "4",
+			"enabled": true
+		}
+	],
+	"results": [
+		{
+			"id": "5c71270c-15df-73d8-52ea-0faf1425ecd1",
+			"name": "add contact",
+			"url": "http://localhost:8080/api/phonebook/contacts",
+			"totalTime": 0,
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+			},
+			"tests": {
+				"new generated id": true
+			},
+			"testPassFailCounts": {
+				"new generated id": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				238
+			],
+			"allTests": [
+				{
+					"new generated id": true
+				}
+			],
+			"time": 238,
+			"totalRequestTime": 238,
+			"iterationResults": {}
+		},
+		{
+			"id": "99b4a2ac-2b12-67f6-d739-ae0180917bc4",
+			"name": "Add a group",
+			"url": "http://localhost:8080/api/phonebook/groups",
+			"totalTime": 0,
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+			},
+			"tests": {
+				"group created": true,
+				"Status code is 200": true
+			},
+			"testPassFailCounts": {
+				"group created": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				97
+			],
+			"allTests": [
+				{
+					"group created": true,
+					"Status code is 200": true
+				}
+			],
+			"time": 97,
+			"totalRequestTime": 97,
+			"iterationResults": {}
+		},
+		{
+			"id": "d4f23b24-2d16-afe9-6cd0-e6be38f21737",
+			"name": "add contact to group",
+			"url": "http://localhost:8080/api/phonebook/groups/add/{{group_key}}/{{contact_key}}",
+			"totalTime": 0,
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+			},
+			"tests": {
+				"Status code is 200": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				50
+			],
+			"allTests": [
+				{
+					"Status code is 200": true
+				}
+			],
+			"time": 50,
+			"totalRequestTime": 50,
+			"iterationResults": {}
+		},
+		{
+			"id": "e9c247ae-2e6b-4d9c-df1d-4ba3d92362d2",
+			"name": "get all contacts",
+			"url": "http://localhost:8080/api/phonebook/contacts",
+			"totalTime": 0,
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+			},
+			"tests": {
+				"Status code is 200": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				19
+			],
+			"allTests": [
+				{
+					"Status code is 200": true
+				}
+			],
+			"time": 19,
+			"totalRequestTime": 19,
+			"iterationResults": {}
+		},
+		{
+			"id": "3c135002-c7ef-30d4-ec23-4d896d963480",
+			"name": "get all groups",
+			"url": "http://localhost:8080/api/phonebook/groups",
+			"totalTime": 0,
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+			},
+			"tests": {
+				"all groups are present": true
+			},
+			"testPassFailCounts": {
+				"all groups are present": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				7
+			],
+			"allTests": [
+				{
+					"all groups are present": true
+				}
+			],
+			"time": 7,
+			"totalRequestTime": 7,
+			"iterationResults": {}
+		},
+		{
+			"id": "b8d6fa4f-f092-39e7-46ea-5a4e081ca2f8",
+			"name": "view all contacts of a group",
+			"url": "http://localhost:8080/api/phonebook/groups",
+			"totalTime": 0,
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+			},
+			"tests": {
+				"all groups are present": true
+			},
+			"testPassFailCounts": {
+				"all groups are present": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				7
+			],
+			"allTests": [
+				{
+					"all groups are present": true
+				}
+			],
+			"time": 7,
+			"totalRequestTime": 7,
+			"iterationResults": {}
+		},
+		{
+			"id": "e5f59c93-c21b-aa4d-f7d7-265071644a8f",
+			"name": "remove contact from group",
+			"url": "http://localhost:8080/api/phonebook/groups/remove/{{group_key}}/{{contact_key}}",
+			"totalTime": 0,
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+			},
+			"tests": {
+				"Status code is 200": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				45
+			],
+			"allTests": [
+				{
+					"Status code is 200": true
+				}
+			],
+			"time": 45,
+			"totalRequestTime": 45,
+			"iterationResults": {}
+		},
+		{
+			"id": "729e6729-6362-ceb0-c915-1736b6c36bf9",
+			"name": "delete contact",
+			"url": "http://localhost:8080/api/phonebook/contacts/{{contact_key}}",
+			"totalTime": 0,
+			"responseCode": {
+				"code": 204,
+				"name": "No Content",
+				"detail": "The server successfully processed the request, but is not returning any content."
+			},
+			"tests": {
+				"delete Status code is 204": true
+			},
+			"testPassFailCounts": {
+				"delete Status code is 204": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				71
+			],
+			"allTests": [
+				{
+					"delete Status code is 204": true
+				}
+			],
+			"time": 71,
+			"totalRequestTime": 71,
+			"iterationResults": {}
+		},
+		{
+			"id": "97228a4e-cfa2-971a-a05c-1dda4c1bcc70",
+			"name": "delete a group",
+			"url": "http://localhost:8080/api/phonebook/groups/{{group_key}}",
+			"totalTime": 0,
+			"responseCode": {
+				"code": 204,
+				"name": "No Content",
+				"detail": "The server successfully processed the request, but is not returning any content."
+			},
+			"tests": {
+				"delete success": true
+			},
+			"testPassFailCounts": {
+				"delete success": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				28
+			],
+			"allTests": [
+				{
+					"delete success": true
+				}
+			],
+			"time": 28,
+			"totalRequestTime": 28,
+			"iterationResults": {}
+		}
+	],
+	"totalPass": 10,
+	"totalFail": 0,
+	"totalTime": 562,
+	"lifecycle": "done",
+	"willStop": false,
+	"requests": [
+		{
+			"name": "add contact",
+			"id": "5c71270c-15df-73d8-52ea-0faf1425ecd1",
+			"url": "http://localhost:8080/api/phonebook/contacts",
+			"time": 238,
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+			},
+			"testPassFailCounts": {
+				"new generated id": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"gridTitles": [
+				"new generated id"
+			],
+			"gridData": [
+				[
+					true
+				]
+			],
+			"tests": {
+				"new generated id": true
+			}
+		},
+		{
+			"name": "Add a group",
+			"id": "99b4a2ac-2b12-67f6-d739-ae0180917bc4",
+			"url": "http://localhost:8080/api/phonebook/groups",
+			"time": 97,
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+			},
+			"testPassFailCounts": {
+				"group created": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"gridTitles": [
+				"group created",
+				"Status code is 200"
+			],
+			"gridData": [
+				[
+					true,
+					true
+				]
+			],
+			"tests": {
+				"group created": true,
+				"Status code is 200": true
+			}
+		},
+		{
+			"name": "add contact to group",
+			"id": "d4f23b24-2d16-afe9-6cd0-e6be38f21737",
+			"url": "http://localhost:8080/api/phonebook/groups/add/{{group_key}}/{{contact_key}}",
+			"time": 50,
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"gridTitles": [
+				"Status code is 200"
+			],
+			"gridData": [
+				[
+					true
+				]
+			],
+			"tests": {
+				"Status code is 200": true
+			}
+		},
+		{
+			"name": "get all contacts",
+			"id": "e9c247ae-2e6b-4d9c-df1d-4ba3d92362d2",
+			"url": "http://localhost:8080/api/phonebook/contacts",
+			"time": 19,
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"gridTitles": [
+				"Status code is 200"
+			],
+			"gridData": [
+				[
+					true
+				]
+			],
+			"tests": {
+				"Status code is 200": true
+			}
+		},
+		{
+			"name": "get all groups",
+			"id": "3c135002-c7ef-30d4-ec23-4d896d963480",
+			"url": "http://localhost:8080/api/phonebook/groups",
+			"time": 7,
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+			},
+			"testPassFailCounts": {
+				"all groups are present": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"gridTitles": [
+				"all groups are present"
+			],
+			"gridData": [
+				[
+					true
+				]
+			],
+			"tests": {
+				"all groups are present": true
+			}
+		},
+		{
+			"name": "view all contacts of a group",
+			"id": "b8d6fa4f-f092-39e7-46ea-5a4e081ca2f8",
+			"url": "http://localhost:8080/api/phonebook/groups",
+			"time": 7,
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+			},
+			"testPassFailCounts": {
+				"all groups are present": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"gridTitles": [
+				"all groups are present"
+			],
+			"gridData": [
+				[
+					true
+				]
+			],
+			"tests": {
+				"all groups are present": true
+			}
+		},
+		{
+			"name": "remove contact from group",
+			"id": "e5f59c93-c21b-aa4d-f7d7-265071644a8f",
+			"url": "http://localhost:8080/api/phonebook/groups/remove/{{group_key}}/{{contact_key}}",
+			"time": 45,
+			"responseCode": {
+				"code": 200,
+				"name": "OK",
+				"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"gridTitles": [
+				"Status code is 200"
+			],
+			"gridData": [
+				[
+					true
+				]
+			],
+			"tests": {
+				"Status code is 200": true
+			}
+		},
+		{
+			"name": "delete contact",
+			"id": "729e6729-6362-ceb0-c915-1736b6c36bf9",
+			"url": "http://localhost:8080/api/phonebook/contacts/{{contact_key}}",
+			"time": 71,
+			"responseCode": {
+				"code": 204,
+				"name": "No Content",
+				"detail": "The server successfully processed the request, but is not returning any content."
+			},
+			"testPassFailCounts": {
+				"delete Status code is 204": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"gridTitles": [
+				"delete Status code is 204"
+			],
+			"gridData": [
+				[
+					true
+				]
+			],
+			"tests": {
+				"delete Status code is 204": true
+			}
+		},
+		{
+			"name": "delete a group",
+			"id": "97228a4e-cfa2-971a-a05c-1dda4c1bcc70",
+			"url": "http://localhost:8080/api/phonebook/groups/{{group_key}}",
+			"time": 28,
+			"responseCode": {
+				"code": 204,
+				"name": "No Content",
+				"detail": "The server successfully processed the request, but is not returning any content."
+			},
+			"testPassFailCounts": {
+				"delete success": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"gridTitles": [
+				"delete success"
+			],
+			"gridData": [
+				[
+					true
+				]
+			],
+			"tests": {
+				"delete success": true
+			}
+		}
+	],
+	"synced": false
+}
