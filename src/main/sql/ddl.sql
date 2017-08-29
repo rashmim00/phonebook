@@ -43,5 +43,5 @@ CREATE TABLE if not exists phonebook.group_participants (
 );
 
 INSERT INTO `phonebook`.`phonenumber` (`contact_id`, `phone_type`, `phone_number`) VALUES ('1', 'home', '408-444-2134');
-INSERT INTO `phonebook`.`phonenumber` (`contact_id`, `phone_type`, `phone_number`) VALUES ('2', 'Mobile', '408-111-2222');
+INSERT INTO `phonebook`.`phonenumber` (`contact_id`, `phone_type`, `phone_number`) VALUES ('1', 'Mobile', '408-111-2222');
 

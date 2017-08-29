@@ -176,18 +176,29 @@ public class PhoneService {
 				.bind("firstName", contact.getFirstName())
 				.bind("lastName", contact.getLastName()).executeAndReturnGeneratedKeys(IntegerColumnMapper.PRIMITIVE) //
 				.first();
-		
-		System.out.println("create contact id " + id);
+
 		// add phone number		
 			if(contact.getPhones() != null && contact.getPhones().size() > 0){
 				contact.getPhones().forEach(p -> {
-					h.createStatement("insert into phonenumber ( " //
-					+ "contact_id, phone_type, phone_number) values (:contact_id, :phoneType, :phoneNumber)") //
-					.bind("contact_id", id)
-					.bind("phoneType", p.getType())
-					.bind("phoneNumber", p.getNumber()).execute();
+					if (p.getType() != null && !p.getType().equals("") && p.getNumber() != null){
+						h.createStatement("insert into phonenumber ( " //
+						+ "contact_id, phone_type, phone_number) values (:contact_id, :phoneType, :phoneNumber)") //
+						.bind("contact_id", id)
+						.bind("phoneType", p.getType())
+						.bind("phoneNumber", p.getNumber()).execute();
+					}
 				});
 			}
+			
+		// add as group participant
+			if(contact.getGroups()!= null && contact.getGroups().size() > 0) {
+				contact.getGroups().forEach(gp -> {
+					h.createStatement("insert into group_participants (groupId, contactId) values (:groupId, :contactId)") //
+					 .bind("groupId", gp) 
+					 .bind("contactId", id).execute();
+				});
+			}
+			 
 		contact.setId(id);
 		jdbi.close(h);
 		return contact;
@@ -291,7 +302,6 @@ public class PhoneService {
 		Handle h = jdbi.open();
 		Group g = h.createQuery("select * from groups where id =:id").bind("id", id).map(new GroupMapper()).first();
 	
-		System.out.println("group get:" + g.getId());
 		// get contact's phone numbers
 		List<Integer> contactIds = h.createQuery("select * from group_participants where groupId =:group") //
 		.bind("group", g.getId()).map(new GroupParticipantMapper(g)).list();

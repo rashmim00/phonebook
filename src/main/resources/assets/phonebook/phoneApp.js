@@ -34,28 +34,10 @@ app.controller("MainCtrl",["$http","$q","$uibModal", function($http, $q, $uibMod
 		controller : "AddContactController",
 		controllerAs : "ctrl",
 		bindToController : true,
-		size : "lg",
-		resolve : {
-			contact : function() {
-				return {id : -1,
-					address : "",
-					birthdate : "",
-					company : "",
-					email : "",
-					favorite : 0,
-					firstName : "",
-					lastName : "",
-					phones : [{"id":-1,"type":"home","number":"123-123-1234"}],
-					groups : []};
-			}
-		}
+		size : "lg"		
 		});
 		modalInstance.result.then(function(addContact) {
 			console.log("on add " + JSON.stringify(addContact));
-			addContact.groups=[];
-//			addContact.phones.forEach(function(phone){
-//				phone.id = -1;
-//			});
 			$http.post("/api/phonebook/contacts/", addContact).then(function(response) {				
 				ctrl.load();
 			})
